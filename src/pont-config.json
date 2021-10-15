@@ -1,0 +1,13 @@
+{
+  // "originUrl": "http://42.192.97.15:1358/yyy/swagger/getJson",
+  "originUrl": "http://0.0.0.0:1358/yyy/swagger/getJson",
+  "outDir": "./services",
+  "templatePath": "./api-template",
+  "prettierConfig": {
+    "jsxSingleQuote": true,
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": false,
+    "bracketSpacing": true
+  }
+}
