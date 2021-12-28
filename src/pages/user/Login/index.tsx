@@ -1,8 +1,4 @@
-import {
-  LockOutlined,
-  MobileOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
@@ -44,10 +40,10 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      console.log(values)
+      console.log(values);
       // 登录
       const msg = {
-        status: 'ok'
+        status: 'ok',
       };
       if (msg.status === 'ok') {
         message.success('登录成功！');
@@ -76,8 +72,8 @@ const Login: React.FC = () => {
       <div className={styles.content}>
         <LoginForm
           logo={<img alt="logo" src="/logo.svg" />}
-          title="yyy管理端"
-          subTitle='yyy管理端公共平台'
+          title="做大做强-精准拿捏"
+          subTitle="zero-one 荣誉出品"
           initialValues={{
             autoLogin: true,
           }}
@@ -87,14 +83,8 @@ const Login: React.FC = () => {
           }}
         >
           <Tabs activeKey={type} onChange={setType}>
-            <Tabs.TabPane
-              key="account"
-              tab='账户密码登录'
-            />
-            <Tabs.TabPane
-              key="mobile"
-              tab='手机号登录'
-            />
+            <Tabs.TabPane key="account" tab="账户密码登录" />
+            <Tabs.TabPane key="mobile" tab="手机号登录" />
           </Tabs>
 
           {status === 'error' && loginType === 'account' && (

@@ -1,6 +1,5 @@
 {
-  // "originUrl": "http://42.192.97.15:1358/yyy/swagger/getJson",
-  "originUrl": "http://0.0.0.0:1358/yyy/swagger/getJson",
+  "originUrl": "http://182.160.12.211:9899/v2/api-docs",
   "outDir": "./services",
   "templatePath": "./api-template",
   "prettierConfig": {

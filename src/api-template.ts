@@ -1,13 +1,12 @@
-import type { Interface } from "pont-engine";
-import { CodeGenerator } from "pont-engine";
+import type { Interface } from 'pont-engine';
+import { CodeGenerator } from 'pont-engine';
 
 function getOption(inter: Interface) {
   const bodyParmas = inter.getBodyParamsCode();
   const hasQueryParams = !!inter.parameters.filter(
-    (param) => param.in === "path" || param.in === "query"
+    (param) => param.in === 'path' || param.in === 'query',
   ).length;
-  const hasBody = !!inter.parameters.filter((param) => param.in === "body")
-    .length;
+  const hasBody = !!inter.parameters.filter((param) => param.in === 'body').length;
   return {
     bodyParmas,
     hasQueryParams,
@@ -19,12 +18,12 @@ function getRequestParams(inter: Interface) {
   const { bodyParmas, hasQueryParams } = getOption(inter);
   const hasParam = bodyParmas || hasQueryParams;
   const requestParams = !hasParam
-    ? ""
+    ? ''
     : bodyParmas && hasQueryParams
-    ? "{queryParams, bodyParams}"
+    ? '{queryParams, bodyParams}'
     : bodyParmas
-    ? "{bodyParams}"
-    : "{queryParams}";
+    ? '{bodyParams}'
+    : '{queryParams}';
   return {
     requestParams,
     bodyParmas,
@@ -36,12 +35,12 @@ function getRequestParamsInterface(inter: Interface) {
   const { bodyParmas, hasQueryParams } = getOption(inter);
   const hasParam = bodyParmas || hasQueryParams;
   const requestParams = !hasParam
-    ? ""
+    ? ''
     : bodyParmas && hasQueryParams
     ? `{queryParams, bodyParams}: {queryParams: Params, bodyParams: ${bodyParmas}}`
     : bodyParmas
     ? `{bodyParams}: {bodyParams: ${bodyParmas}}`
-    : "{queryParams}: {queryParams: Params}";
+    : '{queryParams}: {queryParams: Params}';
   return requestParams;
 }
 
@@ -49,16 +48,12 @@ export default class MyGenerator extends CodeGenerator {
   private getCode(inter: Interface) {
     const bodyParamsCode = inter.getBodyParamsCode();
     const { hasQueryParams, hasBody } = getOption(inter);
-    const queryPramsCode = hasQueryParams ? "params: Params" : "";
+    const queryPramsCode = hasQueryParams ? 'params: Params' : '';
     const requestParams = hasBody
-      ? `${
-          queryPramsCode ? `${queryPramsCode},` : ""
-        } bodyParams: ${bodyParamsCode}`
+      ? `${queryPramsCode ? `${queryPramsCode},` : ''} bodyParams: ${bodyParamsCode}`
       : queryPramsCode;
     const exportParamsCode = `${
-      hasQueryParams
-        ? `export ${inter.getParamsCode("Params", this.surrounding)}`
-        : ""
+      hasQueryParams ? `export ${inter.getParamsCode('Params', this.surrounding)}` : ''
     }`;
     return {
       bodyParamsCode,
@@ -75,12 +70,11 @@ export default class MyGenerator extends CodeGenerator {
     const requestParamsInerface = getRequestParamsInterface(inter);
     return `
       ${exportParamsCode}
-      export type IResponseDataType = ${inter.responseType};
+      export type IResponseDataType = any;
       export type IReturnType = Promise<IResponseDataType>
-      export function ${
-        inter.name
-      }(${requestParamsInerface}${requestParamsInerface &&
-      ","}errorHandler?: (error: AxiosResponse<ResponseData>) => void): IReturnType;
+      export function ${inter.name}(${requestParamsInerface}${
+      requestParamsInerface && ','
+    }errorHandler?: (error: AxiosResponse<ResponseData>) => void): IReturnType;
     `;
   }
   getDeclaration() {
@@ -118,11 +112,9 @@ export default class MyGenerator extends CodeGenerator {
     `;
   }
   getInterfaceContent(inter: Interface) {
-    const { bodyParmas, hasQueryParams, requestParams } = getRequestParams(
-      inter
-    );
+    const { bodyParmas, hasQueryParams, requestParams } = getRequestParams(inter);
 
-    const queryParamsType = "IQueryParams";
+    const queryParamsType = 'IQueryParams';
     const queryParamsTmp = `queryParams:${queryParamsType}`;
     const bodyParamsTmp = `bodyParams:${bodyParmas}`;
     const paramsInterfaceTmp =
@@ -130,12 +122,12 @@ export default class MyGenerator extends CodeGenerator {
         ? `
     interface IParams{
       ${queryParamsTmp}
-      ${bodyParmas ? bodyParamsTmp : ""}
+      ${bodyParmas ? bodyParamsTmp : ''}
     }
     `
         : bodyParmas
         ? `interface IParams{
-      ${bodyParmas ? bodyParamsTmp : ""}
+      ${bodyParmas ? bodyParamsTmp : ''}
     }`
         : `interface IParams{
       ${queryParamsTmp}
@@ -156,14 +148,14 @@ export default class MyGenerator extends CodeGenerator {
     export ${paramsInterfaceTmp}
 
     export function ${inter.name} (${
-      requestParams ? `${requestParams}:IParams = {} as IParams,` : ""
+      requestParams ? `${requestParams}:IParams = {} as IParams,` : ''
     }
       errorHandler?: (error: AxiosResponse<ResponseData>) => void): Promise<${
         inter.responseType
       }|unknown> {
       return Request('${inter.path}',
           '${inter.method}',
-          ${bodyParmas ? "bodyParams" : hasQueryParams ? "queryParams" : "{}"},
+          ${bodyParmas ? 'bodyParams' : hasQueryParams ? 'queryParams' : '{}'},
           errorHandler
       );
     }

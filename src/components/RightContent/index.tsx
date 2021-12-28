@@ -1,7 +1,6 @@
 import { Space } from 'antd';
 import React from 'react';
-import { useModel, SelectLang } from 'umi';
-import Avatar from './AvatarDropdown';
+import { useModel } from 'umi';
 import styles from './index.less';
 
 export type SiderTheme = 'light' | 'dark';
@@ -21,8 +20,8 @@ const GlobalHeaderRight: React.FC = () => {
   }
   return (
     <Space className={className}>
-      <Avatar />
-      <SelectLang className={styles.action} />
+      {/* <Avatar />
+      <SelectLang className={styles.action} /> */}
     </Space>
   );
 };

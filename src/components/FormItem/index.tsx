@@ -10,41 +10,37 @@ import {
   ProFormDateTimePicker,
   ProFormDateRangePicker,
   ProFormDateTimeRangePicker,
-  ProFormUploadButton
+  ProFormUploadButton,
 } from '@ant-design/pro-form';
 import type { IFormItem } from '@/type/formItem';
 import { useMemo, useState, useRef } from 'react';
 import { putObjectList } from '@/utils/cos';
 
 interface IProps {
-  formList: IFormItem[]
-  readonly?: boolean
+  formList: IFormItem[];
+  readonly?: boolean;
 }
 
 function Index(props: IProps) {
-  const {
-    formList,
-    readonly = false
-  } = props
+  const { formList, readonly = false } = props;
   const { current: firstCurrent } = useRef({
-    firstFlag: true
-  })
+    firstFlag: true,
+  });
   // 文件上传
   const [fileList, setFileList] = useState([] as any[]);
   const beforeUpload = async (file: File) => {
-
-    const files = await putObjectList([file])
-    console.log(firstCurrent.firstFlag, fileList, files)
-    if(files){
-      setFileList([...fileList, ...files])
+    const files = await putObjectList([file]);
+    console.log(firstCurrent.firstFlag, fileList, files);
+    if (files) {
+      setFileList([...fileList, ...files]);
     }
-    return false
-  }
+    return false;
+  };
   const onRemove = (file: any) => {
     const index = fileList.indexOf(file);
     fileList.splice(index, 1);
     setFileList([...fileList]);
-  }
+  };
   const render = useMemo(() => {
     return formList.map((item) => {
       const itemProps: any = {
@@ -52,23 +48,29 @@ function Index(props: IProps) {
         name: item.name,
         label: item.label,
         placeholder: `请输入${item.label}`,
-        rules: item.rules ? item.rules : item.required ? [{
-          message: `请输入${item.label}`,
-          required: true
-        }] : [],
+        rules: item.rules
+          ? item.rules
+          : item.required
+          ? [
+              {
+                message: `请输入${item.label}`,
+                required: true,
+              },
+            ]
+          : [],
         key: item.type + item.name,
         options: item.options,
         valueEnum: item.valueEnum,
         readonly: readonly,
-        ...item.otherProps
-      }
-      console.log(firstCurrent.firstFlag)
-      if(itemProps.fileListToo && firstCurrent.firstFlag) {
-        console.log('执行')
+        ...item.otherProps,
+      };
+      console.log(firstCurrent.firstFlag);
+      if (itemProps.fileListToo && firstCurrent.firstFlag) {
+        console.log('执行');
         setFileList(itemProps.fileListToo);
         firstCurrent.firstFlag = false;
       }
-      switch(item.type){
+      switch (item.type) {
         case 'ProFormText':
           return <ProFormText {...itemProps} />;
         case 'ProFormRadio':
@@ -80,38 +82,39 @@ function Index(props: IProps) {
         case 'ProFormCheckbox':
           return <ProFormCheckbox.Group {...itemProps} />;
         case 'ProFormDigit':
-          return <ProFormDigit {...itemProps}/>;
+          return <ProFormDigit {...itemProps} />;
         case 'ProFormTextArea':
-          return <ProFormTextArea {...itemProps}/>;
+          return <ProFormTextArea {...itemProps} />;
         case 'ProFormDatePicker':
-          return <ProFormDatePicker {...itemProps}/>;
+          return <ProFormDatePicker {...itemProps} />;
         case 'ProFormDateTimePicker':
-          return <ProFormDateTimePicker {...itemProps}/>;
+          return <ProFormDateTimePicker {...itemProps} />;
         case 'ProFormDateRangePicker':
-          return <ProFormDateRangePicker {...itemProps}/>;
+          return <ProFormDateRangePicker {...itemProps} />;
         case 'ProFormDateTimeRangePicker':
-          return <ProFormDateTimeRangePicker {...itemProps}/>;
+          return <ProFormDateTimeRangePicker {...itemProps} />;
         case 'ProFormDateTimePicker':
-          return <ProFormDateTimePicker {...itemProps}/>;
+          return <ProFormDateTimePicker {...itemProps} />;
         case 'ProFormUploadButton':
-          return <ProFormUploadButton
-                  fieldProps={{
-                    name: 'file',
-                    listType: 'picture-card',
-                    beforeUpload,
-                    onRemove
-                  }}
-                  fileList={fileList}
-                  {...itemProps}
-                />;
+          return (
+            <ProFormUploadButton
+              fieldProps={{
+                name: 'file',
+                listType: 'picture-card',
+                beforeUpload,
+                onRemove,
+              }}
+              fileList={fileList}
+              {...itemProps}
+            />
+          );
         default:
-          return <ProFormText {...itemProps}/>;
+          return <ProFormText {...itemProps} />;
       }
-    })
-  }, [fileList, formList, readonly])
-  return (
-    <>{render}</>
-  );
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileList, formList, readonly]);
+  return <>{render}</>;
 }
 
-export default Index
+export default Index;

@@ -2,8 +2,10 @@ import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
+
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
+import '@/services';
 const loginPath = '/user/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -21,7 +23,7 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      console.log('获取用户信息')
+      console.log('获取用户信息');
     } catch (error) {
       // 去登录
       history.push(loginPath);
